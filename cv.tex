@@ -1,0 +1,45 @@
+% !TEX TS-program = luatex
+% Awesome Source CV LaTeX Template
+%
+% This template has been downloaded from:
+% https://github.com/darwiin/awesome-neue-latex-cv
+%
+% Author:
+% Christophe Roger (Darwiin)
+%
+% Template license:
+% CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/)
+
+\documentclass[localFont,alternative]{yaac-another-awesome-cv}
+\name{Mayank}{Suman}
+\tagline{Senior Software Developer, Frontend}
+% \photo{2.5cm}{darwiin}
+\socialinfo{
+	\linkedin{mayanksuman} \\
+	\github{mayank-suman}\\
+	\websiteGlobe{www.mayanksuman.dev}{mayanksuman.dev}\\
+	\smartphone{+1 778 682 8960}
+	\email{mayankcsmn@gmail.com}\\
+	% \infos{15 April}
+	\address{Metro Vancouver, British Columbia, Canada}
+}
+
+\begin{document}
+	\makecvheader
+
+	\makecvfooter
+		{\textsc{\selectlanguage{english}\today}} % \selectlanguage{english}\today
+		{\textsc{Mayank Suman}}
+		{\thepage}
+
+	\input{section_headline}
+	\input{section_experience_short}		% Section experience
+	\input{section_competences}				% Section tech stack
+	% \input{key_skills}				        % Section key Skills
+	\input{section_scolarite}	            % Section academics
+        \newpage
+	\input{section_projets}                 % Section projects
+	\input{section_langues}					% Section languages	
+	%\input{section_interets}				% Section intérêts
+	%\input{section_references} 		    % Section références
+\end{document}
