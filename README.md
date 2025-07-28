@@ -104,10 +104,11 @@ The web dashboard provides:
 ## Project Structure 📁
 
 ```
-cv.tex                           # Main CV document
-yaac-another-awesome-cv.cls      # CV class file
-section_*.tex                    # CV sections
-fonts/                           # Custom fonts
+src/                             # Source files
+  ├── cv.tex                     # Main CV document
+  ├── yaac-another-awesome-cv.cls # CV class file
+  ├── section_*.tex              # CV sections
+  └── fonts/                     # Custom fonts
 server.js                        # Main development server
 build.js                         # Build system
 package.json                     # Node.js dependencies

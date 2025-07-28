@@ -129,7 +129,7 @@ class CVBuilder {
           stdio: ["pipe", "pipe", "pipe"],
           env: {
             ...process.env,
-            TEXINPUTS: "./src/:",
+            TEXINPUTS: "./src/:./src/fonts/:",
           },
         }
       );
