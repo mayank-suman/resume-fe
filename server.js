@@ -96,7 +96,15 @@ class CVServer {
     // File editor (simple)
     this.app.get("/api/file/:filename", async (req, res) => {
       try {
-        const content = await fs.readFile(req.params.filename, "utf8");
+        const filename = req.params.filename;
+        // Check if file is a LaTeX file and look in src directory
+        const filePath =
+          filename.endsWith(".tex") ||
+          filename.endsWith(".cls") ||
+          filename.endsWith(".sty")
+            ? path.join("src", filename)
+            : filename;
+        const content = await fs.readFile(filePath, "utf8");
         res.json({ content });
       } catch (error) {
         res.status(404).json({ error: "File not found" });
@@ -105,7 +113,15 @@ class CVServer {
 
     this.app.post("/api/file/:filename", async (req, res) => {
       try {
-        await fs.writeFile(req.params.filename, req.body.content, "utf8");
+        const filename = req.params.filename;
+        // Check if file is a LaTeX file and save in src directory
+        const filePath =
+          filename.endsWith(".tex") ||
+          filename.endsWith(".cls") ||
+          filename.endsWith(".sty")
+            ? path.join("src", filename)
+            : filename;
+        await fs.writeFile(filePath, req.body.content, "utf8");
         res.json({ success: true, message: "File saved" });
       } catch (error) {
         res.status(500).json({ success: false, error: error.message });

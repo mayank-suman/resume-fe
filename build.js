@@ -6,10 +6,10 @@ const chokidar = require("chokidar");
 class CVBuilder {
   constructor() {
     this.config = {
-      source: "cv.tex",
+      source: "src/cv.tex",
       output: "cv.pdf",
       compiler: "lualatex",
-      watchFiles: ["*.tex", "*.cls", "*.sty"],
+      watchFiles: ["src/*.tex", "src/*.cls", "src/*.sty"],
       auxFiles: [
         "*.aux",
         "*.log",
@@ -117,26 +117,35 @@ class CVBuilder {
 
   runCompilation() {
     return new Promise((resolve) => {
-      const process = spawn(
+      const compilationProcess = spawn(
         this.config.compiler,
-        ["-interaction=nonstopmode", "-halt-on-error", this.config.source],
+        [
+          "-interaction=nonstopmode",
+          "-halt-on-error",
+          "-output-directory=.",
+          this.config.source,
+        ],
         {
           stdio: ["pipe", "pipe", "pipe"],
+          env: {
+            ...process.env,
+            TEXINPUTS: "./src/:",
+          },
         }
       );
 
       let stdout = "";
       let stderr = "";
 
-      process.stdout.on("data", (data) => {
+      compilationProcess.stdout.on("data", (data) => {
         stdout += data.toString();
       });
 
-      process.stderr.on("data", (data) => {
+      compilationProcess.stderr.on("data", (data) => {
         stderr += data.toString();
       });
 
-      process.on("close", (code) => {
+      compilationProcess.on("close", (code) => {
         if (code === 0) {
           resolve({ success: true, stdout, stderr });
         } else {
@@ -149,7 +158,7 @@ class CVBuilder {
         }
       });
 
-      process.on("error", (error) => {
+      compilationProcess.on("error", (error) => {
         resolve({
           success: false,
           error: `Process error: ${error.message}`,
