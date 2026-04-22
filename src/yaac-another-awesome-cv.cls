@@ -153,7 +153,9 @@
 }
 {
   \setmainfont{SourceSansPro-Light}[
-    BoldFont = SourceSansPro-Regular, 
+    Path = ./src/fonts/,
+    Extension = .otf,
+    BoldFont = SourceSansPro-Regular,
     ItalicFont = SourceSansPro-LightIt]
 }
 
