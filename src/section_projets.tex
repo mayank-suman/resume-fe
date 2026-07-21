@@ -13,7 +13,26 @@
 \sectionTitle{Experience}{\faLaptop}
 \begin{projects}
     \project
-    {Ooma}{Vancouver, British Columbia, Canada - (Hybrid)}{2022 - Current}
+    {Xsolla}{Montreal, Quebec, Canada - (Remote)}{2025 - Current}
+    {\website{https://www.xsolla.com/}{xsolla.com}}
+    {Xsolla Quest Platform (QP) is a Go microservices monorepo powering the Xsolla Offerwall, an ad-tech platform where users earn rewards (Xsolla Points, virtual currency, gift cards) by completing in-app offers, watching videos, and installing games, serving both a publisher-facing admin panel and a user-facing offerwall/rewards experience.
+    \begin{itemize}
+        \item Architected unified Publisher App \& Revenue Share administration tools, building complex validation schemas, reactive form inputs, and inheritance displays to streamline partner configurations across placement types.
+        \item Engineered robust programmatic navigation controls by implementing a pre-navigation readiness pattern to eliminate race conditions and rendering artifacts during route transitions.
+        \item Upgraded cross-platform video player capabilities, adding seamless portrait/landscape orientation switching and resolving touch-target hit-box issues in landscape mode.
+        \item Delivered a pixel-perfect First Time User Experience (FTUE) from Figma specifications, engineering custom layout adaptations, dynamic button positioning, and optimized image rendering for fluid onboarding.
+        \item Resolved complex mobile layout and z-index collision issues, repairing bottom navigation overlaps, sticky CTAs, and tooltips to ensure consistent usability across screen densities.
+        \item Optimized list state management, implementing scroll position preservation across deep navigation stacks on rewards and offer wall screens.
+        \item Overhauled frontend analytics pipelines, injecting persistent device headers, implementing fetch keepalive mechanisms to guarantee event delivery during page unload, and routing custom app event funnels.
+        \item Fixed build export and service-resolution pipelines across web builds to ensure accurate Datadog APM tracking and third-party monitoring.
+        \item Enhanced anti-fraud and backend tracking systems, extending model schemas and refining third-party fraud verification response handling.
+        \item Integrated SonarQube automated code quality analysis into offerwall project CI/CD pipelines to enforce static analysis standards and security scanning.
+        % \item Restored test suite integrity by unskipping and resolving 17 execution-blocking UI and rendering unit tests in Tamagui design system packages.
+    \end{itemize}}
+    {TypeScript, React.js, Tamagui, Go, Datadog, SonarQube}
+
+    \project
+    {Ooma}{Vancouver, British Columbia, Canada - (Hybrid)}{2022 - 2024}
     {\website{https://www.ooma.ca/}{ooma.ca}}
     {Ooma, Inc. is a publicly traded telecommunications company based in Silicon Valley, California, offering communication services including Voice.
     \begin{itemize}
@@ -24,15 +43,17 @@
         \item Developed a reusable autocomplete input component which auto-fills the address parts in different fields that fetches the real addresses using Google Maps API which helped in improving the user experience.
         \item Planning and building applications' data layer, caching, routing strategies and building shared component library using React and Next.js.
         \item Documenting code, contributing to style guides, and working in close coordination with various team associates.
-        \item Creating and maintaining efficient API queries using GraphQL and Redux Tooltip. 
+        % \item Creating and maintaining efficient API queries using GraphQL and Redux Tooltip. 
         \item Led the migration of a complex phone system admin portal and unified telecom application from JQuery and Javascript to React.js SPA.
         \item Redesigning and implementing modern UI/UX principles, improving application responsiveness, and enhancing maintainability.
-        \item Worked closely with QA in adapting components in support of the automated testing suite.
-        \item Collaborated with design and business teams to align requirements with the broader design system across multiple applications.
-        \item Providing technical feedback and estimates, allowing for streamlined development processes and on-time project delivery.
+        % \item Worked closely with QA in adapting components in support of the automated testing suite.
+        % \item Collaborated with design and business teams to align requirements with the broader design system across multiple applications.
+        % \item Providing technical feedback and estimates, allowing for streamlined development processes and on-time project delivery.
         \item Optimized Cypress.js test suite to improve test execution times, leading to a more efficient and effective testing process
     \end{itemize}}
     {ReactJS, NextJS, Typescript, GraphQL, Redux Toolkit (RTK Query), Jest, React testing Library, NodeJS, MUI, Styled Components}
+
+    \newpage
 
     \project
     {Simpplr}{Toronto, Ontario, Canada - (Remote)}{2019 - 2022}
@@ -52,7 +73,6 @@
     \end{itemize}}
     {ReactJS, NextJS, Typescript, Redux, React Query, Webpack, Jest, React testing Library, Cypress, Javascript, NodeJS}
 
-    \newpage
     \project
     {RSG Media}{New Delhi, India - (Onsite)}{2016 - 2019}
     {\website{https://promo.rsgmedia.com}{Prophet 2.0}}
@@ -119,6 +139,8 @@
     \end{itemize}}
     {PHP, Magento, JQuery, Javascript, MySQL, HTML, CSS}
 
+    \newpage
+    
     \project
     {Diametric Solutions and others} {New Delhi, India - (Onsite)} {2012 - 2013}
     {}
