@@ -424,7 +424,7 @@
 
 % Define the 'projects' environment
 \newenvironment{projects}{%
-  \begin{longtable}{l}
+  \begin{longtable}{p{\dimexpr\linewidth-1.5em}}
 }{%
   \end{longtable}
 }
@@ -436,17 +436,15 @@
 %   {<link1> <link2>}
 %   {<Project description>}
 %   {<techno1>,<techno2>}
+% NOTE: content is emitted directly into the longtable cell (no wrapping
+% \minipage) so LaTeX can break the entry across pages when it overflows;
+% a \minipage is an atomic box and would otherwise force overfull pages.
 \newcommand\project[6]{
-  \begin{minipage}[t]{\dimexpr(\linewidth) - 1.5em}
     \textbf{\textsc{#1}} - \textit{#2} \hfill \textsc{#3}\smallskip\\#4\\
-    %#4\smallskip\\
-    \begin{minipage}[t]{\rightcolumnlength}
-        #5
-    \end{minipage}\smallskip\\
+    #5\smallskip\\
     \footnotesize{\foreach \n in {#6}{\cvtag{\n}}}\\
     \vspace{1em}
-  \end{minipage}
-    \\*
+    \\
 }
 
 
