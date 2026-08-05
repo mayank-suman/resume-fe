@@ -17,7 +17,7 @@
         padding: 20px;
       }
       .container {
-        max-width: 1200px;
+        max-width: 1600px;
         margin: 0 auto;
         background: white;
         border-radius: 12px;
@@ -40,7 +40,7 @@
       }
       .main-content {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 0.7fr 1.3fr;
         gap: 30px;
         padding: 30px;
       }
@@ -102,16 +102,27 @@
         color: #0c5460;
         border: 1px solid #bee5eb;
       }
+      .left-column,
+      .right-column {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+      .right-column {
+        flex: 1;
+      }
       .pdf-viewer {
-        grid-column: 1 / -1;
-        height: 600px;
+        flex: 1;
+        min-height: 600px;
         border: 1px solid #ddd;
         border-radius: 8px;
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
       }
       .pdf-viewer iframe {
         width: 100%;
-        height: 100%;
+        flex: 1;
         border: none;
       }
       .logs {
@@ -177,77 +188,81 @@
       </div>
 
       <div class="main-content">
-        <div class="panel">
-          <h2>🔨 Build Controls</h2>
-          <div id="status-display"></div>
-          <div>
-            <button class="btn" onclick="buildCV()">Build CV</button>
-            <button class="btn secondary" onclick="cleanFiles()">
-              Clean Files
-            </button>
-            <button class="btn success" onclick="openPDF()">Open PDF</button>
+        <div class="left-column">
+          <div class="panel">
+            <h2>🔨 Build Controls</h2>
+            <div id="status-display"></div>
+            <div>
+              <button class="btn" onclick="buildCV()">Build CV</button>
+              <button class="btn secondary" onclick="cleanFiles()">
+                Clean Files
+              </button>
+              <button class="btn success" onclick="openPDF()">Open PDF</button>
+            </div>
+            <div class="loading" id="loading">
+              <div class="spinner"></div>
+              <p>Building CV...</p>
+            </div>
           </div>
-          <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>Building CV...</p>
+
+          <div class="panel">
+            <h2>📊 Status</h2>
+            <div id="cv-status">
+              <p>Loading status...</p>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h2>📁 Project Files</h2>
+            <ul class="file-list">
+              <li>
+                cv.tex
+                <button class="btn" onclick="editFile('cv.tex')">Edit</button>
+              </li>
+              <li>
+                section_experience_short.tex
+                <button
+                  class="btn"
+                  onclick="editFile('section_experience_short.tex')"
+                >
+                  Edit
+                </button>
+              </li>
+              <li>
+                section_competences.tex
+                <button class="btn" onclick="editFile('section_competences.tex')">
+                  Edit
+                </button>
+              </li>
+              <li>
+                section_scolarite.tex
+                <button class="btn" onclick="editFile('section_scolarite.tex')">
+                  Edit
+                </button>
+              </li>
+              <li>
+                section_projets.tex
+                <button class="btn" onclick="editFile('section_projets.tex')">
+                  Edit
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          <div class="panel">
+            <h2>📋 Build Logs</h2>
+            <div class="logs" id="logs">
+              <div>🚀 CV Builder Server Started</div>
+              <div>✅ Ready to build your CV</div>
+            </div>
           </div>
         </div>
 
-        <div class="panel">
-          <h2>📊 Status</h2>
-          <div id="cv-status">
-            <p>Loading status...</p>
+        <div class="right-column">
+          <div class="pdf-viewer" id="pdf-container" style="display: none">
+            <h2 style="padding: 20px; margin: 0">📖 PDF Preview</h2>
+            <iframe id="pdf-frame" src="/cv.pdf"></iframe>
           </div>
-        </div>
-
-        <div class="panel">
-          <h2>📁 Project Files</h2>
-          <ul class="file-list">
-            <li>
-              cv.tex
-              <button class="btn" onclick="editFile('cv.tex')">Edit</button>
-            </li>
-            <li>
-              section_experience_short.tex
-              <button
-                class="btn"
-                onclick="editFile('section_experience_short.tex')"
-              >
-                Edit
-              </button>
-            </li>
-            <li>
-              section_competences.tex
-              <button class="btn" onclick="editFile('section_competences.tex')">
-                Edit
-              </button>
-            </li>
-            <li>
-              section_scolarite.tex
-              <button class="btn" onclick="editFile('section_scolarite.tex')">
-                Edit
-              </button>
-            </li>
-            <li>
-              section_projets.tex
-              <button class="btn" onclick="editFile('section_projets.tex')">
-                Edit
-              </button>
-            </li>
-          </ul>
-        </div>
-
-        <div class="panel">
-          <h2>📋 Build Logs</h2>
-          <div class="logs" id="logs">
-            <div>🚀 CV Builder Server Started</div>
-            <div>✅ Ready to build your CV</div>
-          </div>
-        </div>
-
-        <div class="pdf-viewer" id="pdf-container" style="display: none">
-          <h2 style="padding: 20px; margin: 0">📖 PDF Preview</h2>
-          <iframe id="pdf-frame" src="/cv.pdf"></iframe>
         </div>
       </div>
     </div>
@@ -329,7 +344,7 @@
         const container = document.getElementById("pdf-container");
         const frame = document.getElementById("pdf-frame");
         frame.src = "/cv.pdf?" + Date.now(); // Cache bust
-        container.style.display = "block";
+        container.style.display = "flex";
       }
 
       async function updateStatus() {
