@@ -62,7 +62,7 @@
 \RequirePackage{url,parskip} 	    % other packages for formatting
 \RequirePackage[usenames,dvipsnames]{xcolor}
 \RequirePackage{fullpage}
-\RequirePackage[margin=1.5cm]{geometry}
+\RequirePackage[top=1.1cm,bottom=1.1cm,left=1.3cm,right=1.3cm,includefoot,footskip=0.6cm]{geometry}
 \RequirePackage{fontawesome}
 \RequirePackage{hyperref}
 \RequirePackage{titlesec}
@@ -256,9 +256,9 @@
 \newcommand\resumetitle[1]{
   \ifundef{\@alternative}{
 	 \par{
-	 	 \bigskip\center{\Large \color{accentcolor}\textbf{#1}\color{Black}}\par
+	 	 \smallskip\center{\Large \color{accentcolor}\textbf{#1}\color{Black}}\par
 	 }
-	 \bigskip
+	 \smallskip
   }{
     \color{accentcolor}\textbf{\large{#1}}\color{black}
   }
@@ -305,7 +305,7 @@
         \idphoto
       \end{minipage}
     }{}
-    \bigskip
+    \medskip
   }
 }
 
@@ -323,7 +323,7 @@
 
 % Define the 'keywords' environment
 \newenvironment{keywords}{%
-  \renewcommand{\arraystretch}{1.1}
+  \renewcommand{\arraystretch}{1.0}
 
   \begin{tabular}{>{}r>{}p{13cm}} 
 }{%
@@ -393,8 +393,8 @@
 \newcommand\experiencenew[4]{
   \textbf{#1}    & \textbf{#2} {#3}  								\\*
   \textbf{#4} \\*
-  \\
-  } 
+  & \vspace{0.2em} \\
+  }
  
 \newcommand\experiencenewlast[4]{
   \textbf{#1}    & \textbf{#2} {#3}  								\\*
@@ -440,10 +440,10 @@
 % \minipage) so LaTeX can break the entry across pages when it overflows;
 % a \minipage is an atomic box and would otherwise force overfull pages.
 \newcommand\project[6]{
-    \textbf{\textsc{#1}} - \textit{#2} \hfill \textsc{#3}\smallskip\\#4\\
-    #5\smallskip\\
+    \textbf{\textsc{#1}} - \textit{#2} \hfill \textsc{#3}\vspace{0.3em}\\#4\\
+    #5\vspace{0.3em}\\
     \footnotesize{\foreach \n in {#6}{\cvtag{\n}}}\\
-    \vspace{1em}
+    \vspace{0.5em}
     \\
 }
 
