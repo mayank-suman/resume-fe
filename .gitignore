@@ -7,6 +7,9 @@ yarn-error.log*
 # Dependency directories
 node_modules/
 
+# Stray IDE LaTeX-preview build artifact (build.js only ever outputs cv.pdf to project root)
+src/cv.pdf
+
 # LaTeX auxiliary files
 *.aux
 *.fdb_latexmk
