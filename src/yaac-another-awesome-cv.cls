@@ -456,24 +456,7 @@
 }
 
 
-% Relative-width two-column variants of keywords/experiences, for use inside
-% \twocolumnsection. tabular's default reference point is its vertical
-% center; [t] makes it align on the first row's baseline instead, so two
-% columns of differing row counts still start flush at the top.
-\newenvironment{keywordshalf}{%
-  \renewcommand{\arraystretch}{1.0}
-  \begin{tabular}[t]{>{\raggedleft\arraybackslash}p{0.30\linewidth}p{0.66\linewidth}}
-}{%
-  \end{tabular}
-}
-
-\newenvironment{experienceshalf}{%
-  \begin{tabular}[t]{>{\raggedleft\arraybackslash}p{0.26\linewidth}|>{\raggedright\arraybackslash}p{0.68\linewidth}}
-}{%
-  \end{tabular}
-}
-
-\long\def\twocolumnsection#1#2{
+\newcommand*\twocolumnsection[2]{
   \begin{minipage}[t]{\dimexpr(\linewidth/2) - 3em}
     #1
   \end{minipage}
