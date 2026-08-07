@@ -19,7 +19,7 @@
 
 \ProvidesClass{yaac-another-awesome-cv}[2018/07/19  v1.9.2 'YAAC: Another Awesome CV' Class]
 
-\LoadClass[a4paper]{article}
+\LoadClass[letterpaper]{article}
 
 \newif\if@showLinks   \@showLinksfalse
 
@@ -64,6 +64,7 @@
 \RequirePackage{fullpage}
 \RequirePackage[top=1.1cm,bottom=1.1cm,left=1.3cm,right=1.3cm,includefoot,footskip=0.6cm]{geometry}
 \RequirePackage{fontawesome}
+\RequirePackage{accsupp}
 \RequirePackage{hyperref}
 \RequirePackage{titlesec}
 \RequirePackage{array}
@@ -129,9 +130,16 @@
 \titleformat{\section}{\Large\raggedright}{}{0em}{}[\titlerule]
 \titlespacing{\section}{0pt}{2pt}{2pt}
 
+% Renders an icon glyph on the page while substituting a plain-text
+% fallback in the PDF's extractable text layer (via PDF /ActualText marked
+% content). FontAwesome glyphs have no meaningful ToUnicode entry and
+% extract as U+FFFD ("<27>") in pdftotext / ATS resume parsers, so this keeps
+% the icon visually while giving parsers a real character to read instead.
+\DeclareRobustCommand{\iconFallback}[2]{\BeginAccSupp{ActualText={#2}}#1\EndAccSupp{}}
+
 % Configure list
-\setlist[itemize,1]{label=\faAngleRight, nosep, leftmargin=2em} 
-\setlist[itemize,2]{label=\faAngleRight, nosep, leftmargin=1.5em} 
+\setlist[itemize,1]{label=\iconFallback{\faAngleRight}{-}, nosep, leftmargin=2em}
+\setlist[itemize,2]{label=\iconFallback{\faAngleRight}{-}, nosep, leftmargin=1.5em}
 
 % Setup Array : new column type
 \newcolumntype{R}[1]{>{\hfill}m{#1}}
@@ -166,14 +174,14 @@
 \newlength{\leftcolumn}
 \setlength{\leftcolumn}{2.5cm}
 
-% Font Awesome icons aliases
-\newcommand{\mailSymbol}{\faAt}
-\newcommand{\locationSymbol}{\faMapMarker}
-\newcommand{\infoSymbol}{\faInfo}
-\newcommand{\linkedinSymbol}{\faLinkedin}
-\newcommand{\viadeoSymbol}{\faViadeo}
-\newcommand{\mobileSymbol}{\faMobilePhone}
-\newcommand{\githubSymbol}{\faGithub}
+% Font Awesome icons aliases (see \iconFallback above for the ATS-text fix)
+\newcommand{\mailSymbol}{\iconFallback{\faAt}{-}}
+\newcommand{\locationSymbol}{\iconFallback{\faMapMarker}{-}}
+\newcommand{\infoSymbol}{\iconFallback{\faInfo}{-}}
+\newcommand{\linkedinSymbol}{\iconFallback{\faLinkedin}{-}}
+\newcommand{\viadeoSymbol}{\iconFallback{\faViadeo}{-}}
+\newcommand{\mobileSymbol}{\iconFallback{\faMobilePhone}{-}}
+\newcommand{\githubSymbol}{\iconFallback{\faGithub}{-}}
 
 \newcommand\link[2]{\color{linkcolor}\href{#1}{#2}\color{Black} }
 \newcommand\important[1]{\textbf #1}
@@ -240,9 +248,9 @@
 
 % Render a website link (optional)
 % Usage: \email{<email adress>}
-\newcommand*{\website}[2]{\sociallink{\faExternalLink}{#1}{#2}}
+\newcommand*{\website}[2]{\sociallink{\iconFallback{\faExternalLink}{-}}{#1}{#2}}
 
-\newcommand*{\websiteGlobe}[2]{\sociallink{\faGlobe}{#1}{#2}}
+\newcommand*{\websiteGlobe}[2]{\sociallink{\iconFallback{\faGlobe}{-}}{#1}{#2}}
 
 % Render a website link (optional)
 % Usage: \email{<email adress>}
@@ -471,8 +479,8 @@
     \begin{tabular}{>{}l >{}l}
       \multicolumn{2}{l}{\textbf{#1}}\\
       \multicolumn{2}{l}{\emph{#2}, \textsc{#3}}\\
-      \quad \mailSymbol & \href{mailto:#4}{#4} \\  
-      \quad \faPhone & #5 \\
+      \quad \mailSymbol & \href{mailto:#4}{#4} \\
+      \quad \iconFallback{\faPhone}{-} & #5 \\
     \end{tabular}
   \end{minipage}%
 }
