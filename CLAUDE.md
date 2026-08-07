@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+> **Sync note:** This file is kept in sync with [AGENTS.md](AGENTS.md) (guidance for other AI agents). If you add, remove, or change anything here, make the same change in AGENTS.md, and vice versa.
+
 ## Commands
 
 ```bash
@@ -57,3 +59,14 @@ The compiled output `cv.pdf` is written to the **project root** (not `src/`), be
   \consultantexperience{...}    % adds client field
 \end{experiences}
 ```
+
+## ATS compatibility (always enforce)
+
+This CV must stay parseable by Applicant Tracking Systems. **Any change to `src/section_*.tex`, `src/cv.tex`, or the `.cls` file must preserve or improve ATS-friendliness** — check this before considering CV content work done:
+
+- **Selectable, linear text**: never rely on images, icons-as-text, or tables/multi-column layouts for content an ATS needs to parse (name, titles, dates, employers, skills, bullet text). Photos/icons are decorative only — never encode information in a visual-only element.
+- **Standard section headings**: keep recognizable headings (Experience, Education, Skills, etc.) — don't rename them to stylized/creative labels.
+- **Reading order**: LaTeX/PDF text-extraction order must match visual order. Avoid layouts (e.g. two-column, floating boxes) that would scramble extraction order — this is why the two-column layout was reverted (see git history around `a232245`).
+- **Plain dates and contact info**: dates and email/phone/links must appear as real extractable text, not embedded in images or icon glyphs without adjacent text.
+- **Standard fonts/encoding**: keep using fontspec with real Unicode text (no custom glyph substitution that breaks copy-paste/extraction).
+- **Verify after changes**: run `npm run build`, then confirm text is selectable/copyable from `cv.pdf` (e.g. `pdftotext cv.pdf - | less`) and that section headings, job titles, dates, and skills all extract cleanly in the right order.
