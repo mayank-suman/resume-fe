@@ -10,6 +10,9 @@ node_modules/
 # Stray IDE LaTeX-preview build artifact (build.js only ever outputs cv.pdf to project root)
 src/cv.pdf
 
+# LaTeX Workshop preview output (redirected here via .vscode/settings.json)
+.latex-preview/
+
 # LaTeX auxiliary files
 *.aux
 *.fdb_latexmk
