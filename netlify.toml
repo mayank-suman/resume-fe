@@ -1,0 +1,20 @@
+# Netlify builds the portfolio (packages/portfolio) from the repo root so npm
+# installs the whole workspace. The CV PDF is not compiled here (no TeX on
+# Netlify); the committed packages/cv/cv.pdf is copied into the site instead,
+# so run `npm run cv:build` and commit the PDF when the CV changes.
+[build]
+  command = "npm run web:build"
+  publish = "packages/portfolio/dist"
+  environment = { NODE_VERSION = "22" }
+
+# The previous site served the CV here; keep shared links working.
+[[redirects]]
+  from = "/shared/mayank_CV_12dec.pdf"
+  to = "/mayank-suman-cv.pdf"
+  status = 301
+
+# Astro emits content-hashed assets.
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
