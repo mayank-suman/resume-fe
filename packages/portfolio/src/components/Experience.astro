@@ -1,0 +1,422 @@
+---
+import Icon from './Icon.astro';
+import type { CV, Role } from '../lib/cv';
+
+interface Props {
+  cv: CV;
+}
+
+const { cv } = Astro.props;
+const VISIBLE_HIGHLIGHTS = 3;
+
+const year = (label: string) => label.split(' ').at(-1);
+const range = (role: Role) => `${role.start.label} – ${role.end.current ? 'now' : role.end.label}`;
+const duration = (role: Role) => {
+  const months = Math.max(1, Math.round((role.end.value - role.start.value) * 12));
+  const y = Math.floor(months / 12);
+  const m = months % 12;
+  return [y && `${y} yr${y > 1 ? 's' : ''}`, m && `${m} mo`].filter(Boolean).join(' ');
+};
+const latest = cv.roles[0];
+---
+
+<section class="section experience" id="experience" aria-labelledby="experience-title">
+  <div class="wrap">
+    <h2 class="section-title display" id="experience-title" data-title>Experience</h2>
+
+    <div class="experience__grid">
+      <nav class="route" aria-label="Career timeline" data-route>
+        <svg class="route__svg" aria-hidden="true" data-route-svg>
+          <path class="route__trail" data-route-trail></path>
+          <path class="route__walked" data-route-walked></path>
+        </svg>
+        <ol class="route__stops" role="list">
+          <li class="route__stop route__stop--now" data-stop data-t={latest.end.value}>
+            <span class="route__dot" aria-hidden="true"></span>
+            <span class="route__label"><strong>{latest.end.current ? 'Now' : year(latest.end.label)}</strong></span>
+          </li>
+          {
+            cv.roles.map((role) => (
+              <li class="route__stop" data-stop data-t={role.start.value} data-stop-for={role.id}>
+                <span class="route__dot" aria-hidden="true" />
+                <a class="route__label" href={`#role-${role.id}`}>
+                  <strong>{year(role.start.label)}</strong>
+                  <span>{role.company}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+        <span class="route__marker" aria-hidden="true" data-route-marker></span>
+      </nav>
+
+      <ol class="roles" role="list">
+        {
+          cv.roles.map((role) => {
+            const shown = role.highlights.slice(0, VISIBLE_HIGHLIGHTS);
+            const more = role.highlights.slice(VISIBLE_HIGHLIGHTS);
+            return (
+              <li class="role" id={`role-${role.id}`} data-role={role.id}>
+                <article aria-labelledby={`role-${role.id}-title`}>
+                  <header class="role__head">
+                    <p class="role__dates">
+                      <span>{range(role)}</span>
+                      <span class="meta">{duration(role)}</span>
+                    </p>
+                    <h3 class="role__title" id={`role-${role.id}-title`}>
+                      {role.title}
+                      <span class="role__at">
+                        at{' '}
+                        {role.companyUrl ? (
+                          <a class="ext" href={role.companyUrl} rel="noopener" target="_blank">
+                            {role.company}
+                            <Icon name="external" />
+                          </a>
+                        ) : (
+                          role.company
+                        )}
+                      </span>
+                    </h3>
+                    {role.location && (
+                      <p class="meta">
+                        {role.location}
+                        {role.workMode && ` (${role.workMode.toLowerCase()})`}
+                      </p>
+                    )}
+                  </header>
+
+                  {role.summary && <p class="role__summary">{role.summary}</p>}
+
+                  {role.sites.length > 0 && (
+                    <p class="role__sites">
+                      <span class="meta">Client sites </span>
+                      {role.sites.join(', ')}
+                    </p>
+                  )}
+
+                  {shown.length > 0 && (
+                    <ul class="role__highlights" role="list">
+                      {shown.map((item) => (
+                        <li>{item}</li>
+                      ))}
+                    </ul>
+                  )}
+                  {more.length > 0 && (
+                    <>
+                      <div class="role__more" id={`role-${role.id}-more`} data-more>
+                        <ul class="role__highlights" role="list">
+                          {more.map((item) => (
+                            <li>{item}</li>
+                          ))}
+                        </ul>
+                      </div>
+                      <button
+                        class="role__toggle"
+                        type="button"
+                        aria-expanded="true"
+                        aria-controls={`role-${role.id}-more`}
+                        data-more-toggle
+                        data-label-closed={`Show ${more.length} more`}
+                        data-label-open="Show less"
+                        hidden
+                      >
+                        <Icon name="plus" />
+                        <span>Show less</span>
+                      </button>
+                    </>
+                  )}
+
+                  <footer class="role__foot">
+                    {role.stack.length > 0 && (
+                      <ul class="role__stack" role="list" aria-label="Tech stack">
+                        {role.stack.map((tech) => (
+                          <li>{tech}</li>
+                        ))}
+                      </ul>
+                    )}
+                    {role.link && (
+                      <a class="ext role__link" href={role.link.url} rel="noopener" target="_blank">
+                        {role.link.label === 'Video' ? 'Watch the product demo' : `Visit ${role.link.label}`}
+                        <Icon name="external" />
+                      </a>
+                    )}
+                  </footer>
+                </article>
+              </li>
+            );
+          })
+        }
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .experience__grid {
+    display: grid;
+    grid-template-columns: minmax(200px, 3fr) minmax(0, 8fr);
+    gap: clamp(32px, 6vw, 96px);
+    align-items: start;
+  }
+
+  /* ----- Route (sticky career trail) ----- */
+  .route {
+    position: sticky;
+    top: calc(var(--nav-h) + 24px);
+    height: min(calc(100svh - var(--nav-h) - 64px), 760px);
+    min-height: 520px;
+  }
+  .route__svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .route__trail,
+  .route__walked {
+    fill: none;
+    stroke-linecap: round;
+  }
+  .route__trail {
+    stroke: var(--contour);
+    stroke-width: 2;
+    stroke-dasharray: 2 7;
+  }
+  .route__walked {
+    stroke: var(--ink);
+    stroke-width: 2.5;
+  }
+  .route__stops {
+    position: absolute;
+    inset: 0;
+  }
+  /* Without JS the stops are a plain list; route.ts positions them on the path. */
+  .route__stop {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .route.is-ready .route__stop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0;
+    width: 100%;
+    height: 0;
+  }
+  .route__dot {
+    position: absolute;
+    width: 11px;
+    height: 11px;
+    margin: -5.5px 0 0 -5.5px;
+    left: var(--x, 0);
+    top: 50%;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 2px solid var(--ink-soft);
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease,
+      transform 0.4s var(--ease-out);
+  }
+  .route:not(.is-ready) .route__dot {
+    position: static;
+    margin: 0;
+  }
+  .route__label {
+    display: grid;
+    line-height: 1.15;
+    font-family: var(--f-display);
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  .route__label strong {
+    font-weight: 660;
+    font-size: 1rem;
+  }
+  a.route__label:hover,
+  .route__stop.is-active .route__label {
+    color: var(--ink);
+  }
+  .route__stop.is-passed .route__dot {
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+  .route__stop.is-active .route__dot {
+    background: var(--sun);
+    border-color: var(--ink);
+    transform: scale(1.35);
+  }
+  .route__marker {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border-radius: 50%;
+    background: var(--sun);
+    box-shadow: 0 0 0 5px color-mix(in oklab, var(--sun) 30%, transparent);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .route.is-ready .route__marker {
+    opacity: 1;
+  }
+
+  /* ----- Roles ----- */
+  .roles {
+    display: grid;
+  }
+  .role {
+    padding-block: clamp(40px, 5vw, 64px);
+    border-top: 1px solid var(--rule);
+    scroll-margin-top: calc(var(--nav-h) + 16px);
+  }
+  .role:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+  .role article {
+    display: grid;
+    gap: 24px;
+    max-width: 46em;
+  }
+  .role__head {
+    display: grid;
+    gap: 10px;
+  }
+  .role__dates {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 14px;
+    font-family: var(--f-display);
+    font-size: var(--step-1);
+    font-weight: 600;
+    font-stretch: 86%;
+  }
+  .role__title {
+    font-family: var(--f-display);
+    font-size: var(--step-3);
+    font-weight: 700;
+    font-stretch: 80%;
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+  .role__at {
+    display: block;
+    font-weight: 380;
+    color: var(--ink-soft);
+  }
+  .role__at a {
+    color: var(--ink);
+    text-decoration: none;
+    background: linear-gradient(var(--sun), var(--sun)) 0 92% / 100% 0.14em no-repeat;
+    transition: background-size 0.4s var(--ease-out);
+  }
+  .role__at a:hover {
+    background-size: 100% 0.45em;
+  }
+  .role__summary {
+    color: var(--ink-soft);
+    font-style: italic;
+    max-width: 40em;
+  }
+  .role__sites {
+    max-width: 40em;
+  }
+  .role__highlights {
+    display: grid;
+    gap: 14px;
+    max-width: 40em;
+  }
+  .role__highlights li {
+    position: relative;
+    padding-left: 26px;
+    text-wrap: pretty;
+  }
+  .role__highlights li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0.72em;
+    width: 12px;
+    height: 1.5px;
+    background: var(--ink-soft);
+  }
+  .role__more {
+    overflow: hidden;
+    /* Read as one list with the visible highlights above it. */
+    margin-top: -24px;
+  }
+  .role__more > .role__highlights {
+    padding-top: 14px;
+  }
+  .role__toggle {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 6px 16px 6px 12px;
+    border: 1.5px solid var(--rule);
+    border-radius: 999px;
+    background: none;
+    font-family: var(--f-display);
+    font-size: 0.95rem;
+    font-weight: 560;
+    cursor: pointer;
+    transition: border-color 0.25s ease;
+  }
+  .role__toggle:hover {
+    border-color: var(--ink);
+  }
+  .role__toggle[hidden] {
+    display: none;
+  }
+  .role__toggle :global(svg) {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.45s var(--ease-out);
+  }
+  .role__toggle[aria-expanded='true'] :global(svg) {
+    transform: rotate(45deg);
+  }
+  .role__foot {
+    display: grid;
+    gap: 18px;
+  }
+  .role__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .role__stack li {
+    padding: 4px 11px;
+    border-radius: 6px;
+    background: var(--paper-raised);
+    font-family: var(--f-display);
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  .role__link {
+    justify-self: start;
+    font-family: var(--f-display);
+    font-weight: 560;
+  }
+
+  @media (max-width: 860px) {
+    .experience__grid {
+      grid-template-columns: 1fr;
+    }
+    .route {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,187 @@
+---
+import { rolesUsing, type CV } from '../lib/cv';
+
+interface Props {
+  cv: CV;
+}
+
+const { cv } = Astro.props;
+const span = (start: number, end: number, current: boolean) =>
+  `${Math.floor(start)}–${current ? 'now' : Math.floor(end)}`;
+---
+
+<section class="section skills" id="skills" aria-labelledby="skills-title">
+  <div class="wrap">
+    <div class="skills__head">
+      <h2 class="section-title display" id="skills-title" data-title>Skills</h2>
+      <p class="skills__hint">
+        Highlighted skills show up in the stacks of my past roles. Select one to see where I used it.
+      </p>
+    </div>
+
+    <div class="skills__readout" data-skill-readout aria-live="polite">
+      <p class="skills__readout-empty">No skill selected.</p>
+    </div>
+
+    <dl class="skills__groups">
+      {
+        cv.skills.map((group) => (
+          <div class="skills__group">
+            <dt>{group.name}</dt>
+            <dd>
+              <ul class="skills__list" role="list">
+                {group.skills.map((skill) => {
+                  const roles = rolesUsing(cv, skill);
+                  if (roles.length === 0) return <li class="chip">{skill}</li>;
+                  const used = roles.map((r) => [r.company, span(r.start.value, r.end.value, r.end.current), r.id]);
+                  return (
+                    <li>
+                      <button
+                        class="chip chip--used"
+                        type="button"
+                        aria-pressed="false"
+                        data-skill={skill}
+                        data-used={JSON.stringify(used)}
+                      >
+                        {skill}
+                        <span class="chip__count" aria-hidden="true">
+                          {roles.length}
+                        </span>
+                        <span class="sr-only">, used in {roles.length} {roles.length > 1 ? 'roles' : 'role'}</span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<style>
+  .skills__head {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    gap: 24px;
+    align-items: end;
+    margin-bottom: clamp(40px, 6vw, 88px);
+  }
+  .skills__head .section-title {
+    margin-bottom: 0;
+  }
+  .skills__hint {
+    color: var(--ink-soft);
+    max-width: 24em;
+  }
+  .skills__readout {
+    position: sticky;
+    top: calc(var(--nav-h) + 12px);
+    z-index: 2;
+    min-height: 64px;
+    margin-bottom: 32px;
+    padding: 14px 20px;
+    border-radius: 14px;
+    background: var(--paper-raised);
+    display: flex;
+    align-items: center;
+    font-size: 1.0625rem;
+  }
+  .skills__readout :global(p) {
+    text-wrap: pretty;
+  }
+  .skills__readout-empty {
+    color: var(--ink-soft);
+  }
+  .skills__readout :global(strong) {
+    font-family: var(--f-display);
+    font-weight: 660;
+  }
+  .skills__readout :global(a) {
+    font-weight: 600;
+  }
+  .skills__groups {
+    display: grid;
+  }
+  .skills__group {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 8fr);
+    gap: 12px 32px;
+    padding-block: 22px;
+    border-top: 1px solid var(--rule);
+  }
+  .skills__group dt {
+    font-family: var(--f-display);
+    font-size: var(--step-1);
+    font-weight: 620;
+    font-stretch: 86%;
+    line-height: 1.2;
+  }
+  .skills__group dd {
+    margin: 0;
+  }
+  .skills__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 6px 14px;
+    border: 1.5px solid var(--rule);
+    border-radius: 999px;
+    background: none;
+    font-family: var(--f-display);
+    font-size: 0.975rem;
+    font-weight: 480;
+    color: var(--ink-soft);
+    line-height: 1.2;
+  }
+  .chip--used {
+    color: var(--ink);
+    border-color: color-mix(in oklab, var(--ink) 45%, transparent);
+    font-weight: 560;
+    cursor: pointer;
+    transition:
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      transform 0.35s var(--ease-out);
+  }
+  .chip--used:hover {
+    border-color: var(--ink);
+    transform: translateY(-2px);
+  }
+  .chip--used[aria-pressed='true'] {
+    background: var(--sun);
+    border-color: var(--sun);
+    color: var(--on-sun);
+  }
+  .chip__count {
+    display: grid;
+    place-items: center;
+    min-width: 22px;
+    height: 22px;
+    padding-inline: 6px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 0.75rem;
+    font-weight: 640;
+  }
+  .chip--used[aria-pressed='true'] .chip__count {
+    background: var(--on-sun);
+    color: var(--sun);
+  }
+
+  @media (max-width: 860px) {
+    .skills__head,
+    .skills__group {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,158 @@
+---
+import Icon from './Icon.astro';
+import type { CV } from '../lib/cv';
+
+interface Props {
+  cv: CV;
+  cvPdf?: string;
+}
+
+const { cv, cvPdf } = Astro.props;
+const { email, phone, linkedin, github } = cv.contact;
+const [emailUser, emailDomain] = (email ?? '').split('@');
+const links = [
+  linkedin && { label: 'LinkedIn', value: `in/${linkedin}`, href: `https://www.linkedin.com/in/${linkedin}/` },
+  github && { label: 'GitHub', value: github, href: `https://github.com/${github}` },
+  phone && { label: 'Phone', value: phone, href: `tel:${phone.replace(/\s+/g, '')}` },
+].filter((link): link is { label: string; value: string; href: string } => Boolean(link));
+---
+
+<section class="section contact" id="contact" aria-labelledby="contact-title">
+  <div class="wrap">
+    <h2 class="section-title display" id="contact-title" data-title>Contact</h2>
+    <p class="lead contact__lead">
+      Hiring for a frontend role, or want a second pair of eyes on a tricky UI? Email is the fastest way to reach me.
+    </p>
+
+    {
+      email && (
+        <div class="contact__email">
+          <a class="contact__address display" href={`mailto:${email}`}>
+            {emailUser}
+            <wbr />@{emailDomain}
+          </a>
+          <button class="btn contact__copy" type="button" data-copy={email}>
+            <Icon name="copy" class="contact__icon contact__icon--copy" />
+            <Icon name="check" class="contact__icon contact__icon--done" />
+            <span data-copy-label>Copy email</span>
+          </button>
+          <span class="sr-only" aria-live="polite" data-copy-status></span>
+        </div>
+      )
+    }
+
+    <ul class="contact__links" role="list">
+      {
+        links.map((link) => (
+          <li>
+            <a href={link.href} rel={link.href.startsWith('http') ? 'noopener' : undefined} target={link.href.startsWith('http') ? '_blank' : undefined}>
+              <span class="meta">{link.label}</span>
+              <span class="contact__value">
+                {link.value}
+                {link.href.startsWith('http') && <Icon name="external" />}
+              </span>
+            </a>
+          </li>
+        ))
+      }
+      {
+        cvPdf && (
+          <li>
+            <a href={cvPdf} download>
+              <span class="meta">CV</span>
+              <span class="contact__value">
+                Download PDF
+                <Icon name="download" />
+              </span>
+            </a>
+          </li>
+        )
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .contact {
+    padding-bottom: clamp(64px, 8vw, 120px);
+  }
+  .contact__lead {
+    margin-bottom: clamp(32px, 5vw, 56px);
+  }
+  .contact__email {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px 28px;
+    margin-bottom: clamp(48px, 7vw, 96px);
+  }
+  .contact__address {
+    --wght: 640;
+    --wdth: 80;
+    font-size: clamp(2rem, 0.8rem + 5.6vw, 6rem);
+    line-height: 1;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    background: linear-gradient(var(--sun), var(--sun)) 0 94% / 0% 0.18em no-repeat;
+    transition:
+      background-size 0.6s var(--ease-out),
+      font-stretch 0.6s var(--ease-out);
+  }
+  .contact__address:hover,
+  .contact__address:focus-visible {
+    background-size: 100% 0.18em;
+  }
+  .contact__copy :global(.contact__icon) {
+    transition:
+      opacity 0.25s ease,
+      transform 0.35s var(--ease-out);
+  }
+  .contact__copy :global(.contact__icon--done) {
+    position: absolute;
+    left: 1.4em;
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  .contact__copy.is-copied :global(.contact__icon--copy) {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  .contact__copy.is-copied :global(.contact__icon--done) {
+    opacity: 1;
+    transform: none;
+  }
+  .contact__links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    border-top: 1px solid var(--rule);
+  }
+  .contact__links a {
+    display: grid;
+    gap: 4px;
+    padding: 22px 20px 24px 0;
+    text-decoration: none;
+  }
+  .contact__value {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--f-display);
+    font-size: var(--step-1);
+    font-weight: 600;
+    font-stretch: 88%;
+  }
+  .contact__value :global(svg) {
+    width: 0.7em;
+    height: 0.7em;
+    transition: transform 0.35s var(--ease-out);
+  }
+  .contact__links a:hover .contact__value :global(svg) {
+    transform: translate(3px, -3px);
+  }
+  .contact__links a:hover .contact__value {
+    text-decoration: underline;
+    text-decoration-color: var(--sun);
+    text-decoration-thickness: 3px;
+    text-underline-offset: 0.25em;
+  }
+</style>

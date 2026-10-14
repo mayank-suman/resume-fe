@@ -1,0 +1,29 @@
+---
+import { existsSync } from 'node:fs';
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Experience from '../components/Experience.astro';
+import Skills from '../components/Skills.astro';
+import Education from '../components/Education.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+import { loadCV } from '../lib/cv';
+
+const cv = loadCV();
+const name = `${cv.firstName} ${cv.lastName}`;
+// Copied from packages/cv by scripts/sync-cv-pdf.mjs; omit the link if the CV wasn't built.
+const cvPdf = existsSync('public/mayank-suman-cv.pdf') ? '/mayank-suman-cv.pdf' : undefined;
+---
+
+<Layout cv={cv}>
+  <Nav slot="nav" name={name} />
+  <Hero cv={cv} cvPdf={cvPdf} />
+  <About cv={cv} />
+  <Experience cv={cv} />
+  <Skills cv={cv} />
+  <Education cv={cv} />
+  <Contact cv={cv} cvPdf={cvPdf} />
+  <Footer slot="footer" name={name} />
+</Layout>

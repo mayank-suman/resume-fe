@@ -1,0 +1,25 @@
+---
+interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+---
+
+<footer class="footer">
+  <div class="wrap footer__inner meta">
+    <p>© {new Date().getFullYear()} {name}</p>
+    <p>Generated from the same LaTeX source as my CV. Built with Astro and GSAP.</p>
+  </div>
+</footer>
+
+<style>
+  .footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-block: 28px 36px;
+    border-top: 1px solid var(--rule);
+  }
+</style>
