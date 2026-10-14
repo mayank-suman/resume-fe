@@ -65,3 +65,6 @@ packages/portfolio/public/mayank-suman-cv.pdf
 
 # Browser-automation scratch output
 .playwright-mcp/
+
+# Netlify CLI link state
+.netlify/
