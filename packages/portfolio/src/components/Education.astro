@@ -1,0 +1,64 @@
+---
+import type { CV } from '../lib/cv';
+
+interface Props {
+  cv: CV;
+}
+
+const { cv } = Astro.props;
+---
+
+<section class="section education" id="education" aria-labelledby="education-title">
+  <div class="wrap">
+    <h2 class="section-title display" id="education-title" data-title>Education</h2>
+    <ol class="education__list" role="list">
+      {
+        cv.education.map((entry) => (
+          <li class="education__item">
+            <p class="education__year">{entry.year}</p>
+            <div>
+              <h3 class="education__degree">{entry.degree}</h3>
+              <p class="meta">{entry.school}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .education {
+    padding-top: 0;
+  }
+  .education__list {
+    display: grid;
+  }
+  .education__item {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 8fr);
+    gap: 8px 32px;
+    padding-block: 26px;
+    border-top: 1px solid var(--rule);
+  }
+  .education__year {
+    font-family: var(--f-display);
+    font-size: var(--step-2);
+    font-weight: 300;
+    font-stretch: 80%;
+    line-height: 1;
+  }
+  .education__degree {
+    font-family: var(--f-display);
+    font-size: var(--step-1);
+    font-weight: 620;
+    font-stretch: 88%;
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+  @media (max-width: 860px) {
+    .education__item {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,31 +1,23 @@
 {
-  "name": "mayank-cv-compiler",
-  "version": "1.0.0",
-  "description": "Node.js LaTeX CV build system and server",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "build": "node build.js",
-    "watch": "node build.js --watch",
-    "clean": "node scripts/clean.js",
-    "dev": "npm run clean && npm run watch",
-    "serve": "node server.js --serve"
-  },
-  "keywords": [
-    "latex",
-    "cv",
-    "build",
-    "server"
-  ],
+  "name": "mayank-suman",
+  "private": true,
+  "description": "Monorepo for Mayank Suman's LaTeX CV and portfolio website",
   "author": "Mayank Suman",
   "license": "MIT",
-  "dependencies": {
-    "express": "^4.18.2",
-    "chokidar": "^3.5.3",
-    "open": "^9.1.0",
-    "ws": "^8.14.2"
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "cv": "npm start -w @mayank/cv",
+    "cv:build": "npm run build -w @mayank/cv",
+    "cv:watch": "npm run watch -w @mayank/cv",
+    "cv:clean": "npm run clean -w @mayank/cv",
+    "web": "npm run dev -w @mayank/portfolio",
+    "web:build": "npm run build -w @mayank/portfolio",
+    "web:preview": "npm run preview -w @mayank/portfolio",
+    "build": "npm run cv:build && npm run web:build"
   },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
+  "engines": {
+    "node": ">=22.12.0"
   }
 }

@@ -8,7 +8,7 @@ yarn-error.log*
 node_modules/
 
 # Stray IDE LaTeX-preview build artifact (build.js only ever outputs cv.pdf to project root)
-src/cv.pdf
+packages/cv/src/cv.pdf
 
 # LaTeX Workshop preview output (redirected here via .vscode/settings.json)
 .latex-preview/
@@ -56,3 +56,12 @@ Thumbs.db
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Portfolio (Astro) build output
+dist/
+.astro/
+# Copied from packages/cv/cv.pdf at build time
+packages/portfolio/public/mayank-suman-cv.pdf
+
+# Browser-automation scratch output
+.playwright-mcp/

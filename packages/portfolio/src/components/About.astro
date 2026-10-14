@@ -1,0 +1,135 @@
+---
+import type { CV } from '../lib/cv';
+
+interface Props {
+  cv: CV;
+}
+
+const { cv } = Astro.props;
+const companies = cv.roles.length;
+const first = cv.roles.at(-1);
+const firstYear = Math.floor(first?.start.value ?? 2012);
+const fromCity = first?.location?.split(',')[0];
+const nowCity = cv.contact.address?.split(',')[0].replace(/^Metro\s+/, '');
+---
+
+<section class="section about" id="about" aria-labelledby="about-title">
+  <div class="wrap about__grid">
+    <h2 class="section-title display about__title" id="about-title" data-title>About</h2>
+
+    <figure class="about__photo" data-photo>
+      <img
+        src="/images/mayank-600.webp"
+        srcset="/images/mayank-300.webp 300w, /images/mayank-600.webp 600w"
+        sizes="(max-width: 860px) 70vw, 30vw"
+        width="600"
+        height="600"
+        loading="lazy"
+        decoding="async"
+        alt={`${cv.firstName} ${cv.lastName} on a desert trip, wearing aviator sunglasses`}
+      />
+    </figure>
+
+    <div class="about__text">
+      <p class="lead about__summary">{cv.summary}</p>
+      <p class="about__facts meta">
+        {companies} teams since {firstYear}{fromCity && nowCity && `, from ${fromCity} to ${nowCity}`}.
+      </p>
+
+      <h3 class="about__subtitle">How I work</h3>
+      <ul class="about__strengths" role="list">
+        {cv.strengths.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about__grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 24px;
+  }
+  .about__title {
+    grid-column: 1 / -1;
+  }
+  .about__photo {
+    grid-column: 1 / span 4;
+    align-self: start;
+    position: sticky;
+    top: calc(var(--nav-h) + 24px);
+  }
+  .about__photo img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 50% 30%;
+    border-radius: 6px;
+    filter: grayscale(1) contrast(1.05);
+    transition: filter 0.8s var(--ease-out);
+  }
+  .about__photo:hover img {
+    filter: none;
+  }
+  .about__text {
+    grid-column: 6 / -1;
+    display: grid;
+    align-content: start;
+  }
+  .about__summary {
+    font-size: var(--step-2);
+    line-height: 1.38;
+    max-width: 28em;
+    text-wrap: pretty;
+  }
+  .about__facts {
+    margin-top: 24px;
+  }
+  .about__subtitle {
+    margin-top: clamp(48px, 7vw, 96px);
+    margin-bottom: 20px;
+    font-family: var(--f-display);
+    font-size: var(--step-1);
+    font-weight: 640;
+    font-stretch: 88%;
+  }
+  .about__strengths {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 32px;
+  }
+  .about__strengths li {
+    padding: 18px 0 22px;
+    border-top: 1px solid var(--rule);
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+  .about__strengths li::before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    margin-bottom: 12px;
+    border-radius: 50%;
+    background: var(--sun);
+  }
+
+  @media (max-width: 860px) {
+    .about__photo {
+      grid-column: 1 / span 8;
+      position: static;
+      margin-bottom: 40px;
+    }
+    .about__text {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 560px) {
+    .about__photo {
+      grid-column: 1 / -1;
+    }
+    .about__strengths {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

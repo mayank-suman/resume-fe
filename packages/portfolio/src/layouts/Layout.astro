@@ -1,0 +1,77 @@
+---
+import '../styles/global.css';
+import type { CV } from '../lib/cv';
+
+interface Props {
+  cv: CV;
+}
+
+const { cv } = Astro.props;
+const fullName = `${cv.firstName} ${cv.lastName}`;
+const title = `${fullName}, Senior Frontend Engineer`;
+const description = `${fullName} is a senior frontend engineer in ${cv.contact.address} with ${cv.yearsOfExperience} years of experience building fast, accessible React and Next.js applications.`;
+const canonical = new URL('/', Astro.site).href;
+const image = new URL('/images/mayank-600.webp', Astro.site).href;
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: fullName,
+  jobTitle: cv.roles[0]?.title,
+  worksFor: cv.roles[0]?.end.current ? { '@type': 'Organization', name: cv.roles[0].company } : undefined,
+  address: { '@type': 'PostalAddress', addressLocality: 'Vancouver', addressRegion: 'BC', addressCountry: 'CA' },
+  email: cv.contact.email ? `mailto:${cv.contact.email}` : undefined,
+  url: canonical,
+  image,
+  sameAs: [
+    cv.contact.linkedin && `https://www.linkedin.com/in/${cv.contact.linkedin}`,
+    cv.contact.github && `https://github.com/${cv.contact.github}`,
+  ].filter(Boolean),
+  knowsAbout: cv.skills.flatMap((group) => group.skills).slice(0, 20),
+};
+---
+
+<!doctype html>
+<html lang="en-CA" class="intro-pending">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#edf1ec" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0d201c" media="(prefers-color-scheme: dark)" />
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta name="twitter:card" content="summary" />
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+    <script is:inline>
+      (function () {
+        var root = document.documentElement;
+        try {
+          var saved = localStorage.getItem('theme');
+          if (saved === 'light' || saved === 'dark') root.dataset.theme = saved;
+        } catch (e) {}
+        // Never leave the hero hidden if the intro script fails to run.
+        setTimeout(function () {
+          root.classList.remove('intro-pending');
+        }, 2500);
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <slot name="nav" />
+    <main id="main">
+      <slot />
+    </main>
+    <slot name="footer" />
+    <script>
+      import '../scripts/main';
+    </script>
+  </body>
+</html>
