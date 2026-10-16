@@ -25,6 +25,7 @@ npm run build       # cv:build, then web:build (the site ships the fresh PDF)
 # GitHub profile README (packages/profile)
 npm run profile:push  # Publish packages/profile to github.com/mayank-suman/mayank-suman (git subtree push)
 npm run profile:pull  # Bring edits made directly on GitHub back into packages/profile
+npm run profile:preview  # Render the README through GitHub's API at http://localhost:3333 (needs: gh extension install yusukebe/gh-markdown-preview)
 ```
 
 Package-level scripts still work inside each package (e.g. `cd packages/cv && npm start`, `PORT=3001 npm start`).
@@ -99,6 +100,7 @@ The GitHub profile README. GitHub only renders it from the repo named after the 
 
 - Edit `packages/profile/README.md` here, commit to `main` as usual, then `npm run profile:push` to publish. Run it from `main`: the push splits the subtree history out of whatever branch is checked out.
 - If the README was edited on GitHub, run `npm run profile:pull` first; otherwise the push is rejected as non-fast-forward.
+- The banner is `assets/banner-{light,dark}.svg`, swapped by GitHub's theme via `<picture>`. Its text is outlined to paths (SVG images can't load web fonts), so change the wording in `scripts/profile-banner.py` and regenerate (setup steps in its docstring). Use relative asset paths so they resolve in both repos.
 - Merge PRs that touch `packages/profile` with a merge commit, never squash or rebase: the subtree import merge must stay in `main`'s history for the split to line up with the profile repo.
 
 ## ATS compatibility (always enforce)

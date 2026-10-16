@@ -68,3 +68,7 @@ packages/portfolio/public/mayank-suman-cv.pdf
 
 # Netlify CLI link state
 .netlify/
+
+# Brainstorming visual-companion mockups
+.superpowers/
+.venv/
