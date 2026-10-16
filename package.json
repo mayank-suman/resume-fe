@@ -17,7 +17,8 @@
     "web:preview": "npm run preview -w @mayank/portfolio",
     "build": "npm run cv:build && npm run web:build",
     "profile:push": "git subtree push --prefix=packages/profile https://github.com/mayank-suman/mayank-suman.git main",
-    "profile:pull": "git subtree pull --prefix=packages/profile https://github.com/mayank-suman/mayank-suman.git main -m \"Merge GitHub profile repo into packages/profile\""
+    "profile:pull": "git subtree pull --prefix=packages/profile https://github.com/mayank-suman/mayank-suman.git main -m \"Merge GitHub profile repo into packages/profile\"",
+    "profile:preview": "gh markdown-preview --markdown-mode packages/profile/README.md"
   },
   "engines": {
     "node": ">=22.12.0"
