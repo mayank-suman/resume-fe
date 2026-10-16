@@ -29,6 +29,7 @@ I'm a passionate **Senior Software Developer** with over **12 years of experienc
 - 📧 Email: [mayankcsmn@gmail.com](mailto:mayankcsmn@gmail.com)
 - 💼 [LinkedIn](https://www.linkedin.com/in/mayanksuman)
 - 🌐 [Portfolio](https://mayanksuman.dev)
+- 📄 [Resume (PDF)](https://mayanksuman.dev/mayank-suman-cv.pdf)
 - 🐙 [GitHub](https://github.com/mayank-suman)
 
     </td>
