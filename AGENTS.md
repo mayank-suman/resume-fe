@@ -21,6 +21,10 @@ npm run web:build   # Static build → packages/portfolio/dist
 npm run web:preview # Serve the static build
 
 npm run build       # cv:build, then web:build (the site ships the fresh PDF)
+
+# GitHub profile README (packages/profile)
+npm run profile:push  # Publish packages/profile to github.com/mayank-suman/mayank-suman (git subtree push)
+npm run profile:pull  # Bring edits made directly on GitHub back into packages/profile
 ```
 
 Package-level scripts still work inside each package (e.g. `cd packages/cv && npm start`, `PORT=3001 npm start`).
@@ -33,6 +37,7 @@ Package-level scripts still work inside each package (e.g. `cd packages/cv && np
 packages/
   cv/          @mayank/cv         LaTeX CV + Node.js build pipeline (source of truth for all CV content)
   portfolio/   @mayank/portfolio  Astro portfolio site that reads its content from packages/cv/src/*.tex
+  profile/     (not a workspace)  GitHub profile README; git subtree of mayank-suman/mayank-suman
 ```
 
 ### CV package (packages/cv)
@@ -87,6 +92,14 @@ Static [Astro](https://astro.build) site, no UI framework. Interactivity is vani
 - `packages/portfolio/src/scripts/`: `contour.ts` (WebGL2 topographic hero shader), `hero.ts` (intro timeline + cursor-reactive variable-font name), `route.ts` (sticky career trail synced to scroll), `main.ts` (wires everything: Lenis, nav, theme toggle, expanders, skills readout, copy email).
 - Design tokens live in `packages/portfolio/src/styles/global.css` (light + dark via `prefers-color-scheme` and `[data-theme]`). Fonts are self-hosted via `@fontsource-variable` (Bricolage Grotesque, Newsreader).
 - All motion must respect `prefers-reduced-motion`; all content must be present in the static HTML (JS only enhances).
+
+### Profile package (packages/profile)
+
+The GitHub profile README. GitHub only renders it from the repo named after the account, so it lives in [mayank-suman/mayank-suman](https://github.com/mayank-suman/mayank-suman) and is mirrored here with `git subtree` (full history imported, not squashed). It has no `package.json`, so npm workspaces skip it.
+
+- Edit `packages/profile/README.md` here, commit to `main` as usual, then `npm run profile:push` to publish. Run it from `main`: the push splits the subtree history out of whatever branch is checked out.
+- If the README was edited on GitHub, run `npm run profile:pull` first; otherwise the push is rejected as non-fast-forward.
+- Merge PRs that touch `packages/profile` with a merge commit, never squash or rebase: the subtree import merge must stay in `main`'s history for the split to line up with the profile repo.
 
 ## ATS compatibility (always enforce)
 
